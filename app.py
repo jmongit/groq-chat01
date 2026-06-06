@@ -1,30 +1,27 @@
-from groq import Groq
-import gradio as gr
 import os
+import gradio as gr
+from groq import Groq
 
-client = Groq(
-    api_key=os.environ["GROQ_API_KEY"]
-)
+client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
 def chat(message, history):
-    messages = []
+    messages = [
+        {"role": "system", "content": "あなたは日本語で自然に答える親切なAIです。"}
+    ]
 
-    for user, bot in history:
-        messages.append({"role": "user", "content": user})
-        messages.append({"role": "assistant", "content": bot})
+    for user_msg, assistant_msg in history:
+        messages.append({"role": "user", "content": user_msg})
+        messages.append({"role": "assistant", "content": assistant_msg})
 
     messages.append({"role": "user", "content": message})
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
-        messages=messages
+        messages=messages,
     )
 
     return response.choices[0].message.content
 
-demo = gr.ChatInterface(chat)
+demo = gr.ChatInterface(fn=chat)
 
-demo.launch(
-    server_name="0.0.0.0",
-    server_port=7860
-)
+demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
