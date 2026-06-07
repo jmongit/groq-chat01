@@ -13,13 +13,10 @@ def chat(message, history):
         {"role": "system", "content": SYSTEM_PROMPT}
     ]
 
-    # 過去の会話を追加
     if history:
-        for user_msg, assistant_msg in history:
-            messages.append({"role": "user", "content": user_msg})
-            messages.append({"role": "assistant", "content": assistant_msg})
+        for item in history:
+            messages.append(item)
 
-    # 今回の質問を追加
     messages.append({"role": "user", "content": message})
 
     response = client.chat.completions.create(
@@ -34,8 +31,9 @@ def chat(message, history):
 
 demo = gr.ChatInterface(
     fn=chat,
-    title="Groq Chat",
-    description="Groq APIを使ったチャットアプリです。"
+    title="chat test",
+    description="会話履歴ありのテスト",
+    type="messages"
 )
 
 port = int(os.environ.get("PORT", 10000))
