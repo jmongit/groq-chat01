@@ -14,9 +14,21 @@ def chat(message, history):
     ]
 
     if history:
-        for user_msg, assistant_msg in history:
-            messages.append({"role": "user", "content": user_msg})
-            messages.append({"role": "assistant", "content": assistant_msg})
+        for item in history:
+            # 新形式: {"role": "...", "content": "..."}
+            if isinstance(item, dict):
+                role = item.get("role")
+                content = item.get("content")
+                if role in ["user", "assistant"] and content:
+                    messages.append({"role": role, "content": content})
+
+            # 旧形式: [user_msg, assistant_msg]
+            elif isinstance(item, (list, tuple)) and len(item) >= 2:
+                user_msg, assistant_msg = item[0], item[1]
+                if user_msg:
+                    messages.append({"role": "user", "content": user_msg})
+                if assistant_msg:
+                    messages.append({"role": "assistant", "content": assistant_msg})
 
     messages.append({"role": "user", "content": message})
 
