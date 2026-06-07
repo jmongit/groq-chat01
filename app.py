@@ -7,13 +7,25 @@ client = Groq(
 )
 
 def chat(message, history):
-    messages = []
+    messages = [
+        {
+            "role": "system",
+            "content": "あなたは親切な日本語アシスタントです。"
+        }
+    ]
 
-    messages.append({
-        "role": "system",
-        "content": "あなたは親切な日本語アシスタントです。"
-    })
+    # 過去の会話をmessagesに追加
+    for user_message, assistant_message in history:
+        messages.append({
+            "role": "user",
+            "content": user_message
+        })
+        messages.append({
+            "role": "assistant",
+            "content": assistant_message
+        })
 
+    # 今回のユーザー発言を追加
     messages.append({
         "role": "user",
         "content": message
