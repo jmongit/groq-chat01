@@ -14,8 +14,9 @@ def chat(message, history):
     ]
 
     if history:
-        for item in history:
-            messages.append(item)
+        for user_msg, assistant_msg in history:
+            messages.append({"role": "user", "content": user_msg})
+            messages.append({"role": "assistant", "content": assistant_msg})
 
     messages.append({"role": "user", "content": message})
 
@@ -32,8 +33,7 @@ def chat(message, history):
 demo = gr.ChatInterface(
     fn=chat,
     title="chat test",
-    description="会話履歴ありのテスト",
-    type="messages"
+    description="会話履歴ありのテスト"
 )
 
 port = int(os.environ.get("PORT", 10000))
