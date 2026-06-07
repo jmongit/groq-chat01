@@ -2,9 +2,7 @@ from groq import Groq
 import gradio as gr
 import os
 
-client = Groq(
-    api_key=os.environ["GROQ_API_KEY"]
-)
+client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
 def chat(message, history):
     messages = [
@@ -14,18 +12,18 @@ def chat(message, history):
         }
     ]
 
-    # 過去の会話をmessagesに追加
-    for user_message, assistant_message in history:
-        messages.append({
-            "role": "user",
-            "content": user_message
-        })
-        messages.append({
-            "role": "assistant",
-            "content": assistant_message
-        })
+    # Gradioの履歴を追加
+    for item in history:
+        if isinstance(item, dict):
+            messages.append({
+                "role": item["role"],
+                "content": item["content"]
+            })
+        else:
+            user_message, assistant_message = item
+            messages.append({"role": "user", "content": user_message})
+            messages.append({"role": "assistant", "content": assistant_message})
 
-    # 今回のユーザー発言を追加
     messages.append({
         "role": "user",
         "content": message
@@ -38,7 +36,10 @@ def chat(message, history):
 
     return response.choices[0].message.content
 
-demo = gr.ChatInterface(chat)
+demo = gr.ChatInterface(
+    fn=chat,
+    type="messages"
+)
 
 demo.launch(
     server_name="0.0.0.0",
