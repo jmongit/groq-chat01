@@ -43,6 +43,7 @@ def chat(message, history):
         messages=messages,
         temperature=0.7,
         max_tokens=1000,
+        css=css
     )
 
     return response.choices[0].message.content
