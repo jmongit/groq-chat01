@@ -33,7 +33,7 @@ def chat(message, history):
     messages.append({"role": "user", "content": message})
 
     response = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
+        model="llama-3.3-70b-versatile",
         messages=messages,
         temperature=0.7,
         max_tokens=1000,
