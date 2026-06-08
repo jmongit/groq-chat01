@@ -2,11 +2,17 @@ import os
 import gradio as gr
 from groq import Groq
 
+css = """
+.message {
+    font-size: 14px !important;
+}
+"""
+
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY")
 )
 
-SYSTEM_PROMPT = "あなたは親切な日本語AIアシスタントです。"
+SYSTEM_PROMPT = "あなたは親切な日本語AIアシスタントです。会話は冗長にしないで，簡潔にして。次の会話に発展になることは言わないようにして。"
 
 def chat(message, history):
     messages = [
