@@ -43,7 +43,6 @@ def chat(message, history):
         messages=messages,
         temperature=0.7,
         max_tokens=1000,
-        css=css
     )
 
     return response.choices[0].message.content
@@ -53,6 +52,7 @@ demo = gr.ChatInterface(
     fn=chat,
     title="chat test",
     description="会話履歴ありのテスト"
+    css=css
 )
 
 port = int(os.environ.get("PORT", 10000))
