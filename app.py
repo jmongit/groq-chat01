@@ -2,12 +2,6 @@ import os
 import gradio as gr
 from groq import Groq
 
-css = """
-.message {
-    font-size: 14px !important;
-}
-"""
-
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY")
 )
@@ -51,8 +45,7 @@ def chat(message, history):
 demo = gr.ChatInterface(
     fn=chat,
     title="chat test",
-    description="会話履歴ありのテスト",
-    css=css
+    description="会話履歴ありのテスト"
 )
 
 port = int(os.environ.get("PORT", 10000))
